@@ -5,6 +5,7 @@ plugins {
 
 kotlin {
     main.dependencies {
+        api(files().builtBy(":lib:publish")) // depends on the publication done in ":lib"
         api("$group:lib-published:$version")
     }
 }
