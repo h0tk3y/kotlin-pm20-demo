@@ -1,16 +1,31 @@
 pluginManagement {
-    repositories {
+    fun RepositoryHandler.configureRepositories() {
         mavenLocal()
-        gradlePluginPortal()
+        mavenCentral()
+        if (this === pluginManagement.repositories) {
+            gradlePluginPortal()
+        } else {
+            maven("$rootDir/build/repo")
+        }
+    }
+
+    repositories {
+        configureRepositories()
     }
     plugins {
-        kotlin("multiplatform.pm20").version("1.5.255-SNAPSHOT")
+        val kotlinVersion = "1.5.255-SNAPSHOT"
+        kotlin("multiplatform.pm20").version(kotlinVersion)
+        kotlin("multiplatform").version(kotlinVersion)
+    }
+    dependencyResolutionManagement.repositories {
+        configureRepositories()
     }
 }
 
-dependencyResolutionManagement {
-    repositories {
-        mavenLocal()
-        jcenter()
-    }
-}
+include(
+    "lib",
+    "app-with-published-dep",
+    "app-with-project-dep",
+    "old-mpp-app-with-project-dep",
+    "old-mpp-app-with-published-dep"
+)
